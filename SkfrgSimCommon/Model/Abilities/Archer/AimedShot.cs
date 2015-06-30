@@ -9,12 +9,12 @@ namespace SkfrgSimCommon.Model.Abilities.Archer
 	{
 		Random rnd;
 
-		public AimedShot()
+		public AimedShot() : base()
 		{
 			Parameters = new AbilityParams()
 			{
 				Name = AbilityNames.Archer.AimedShot,
-				CastTime = 1000,
+				TotalCastTime = 1000,
 				CoolDown = 0,
 				DmgCoeff = 2.94,
 				ImpulseDmgCoeff = 1,
@@ -31,7 +31,7 @@ namespace SkfrgSimCommon.Model.Abilities.Archer
 
 			if (rnd.Next() <= 0.2)
 			{
-				context.ApplyBuffToSource(null);
+				//context.ApplyBuffToSource(null);
 			}
 		}
 	}

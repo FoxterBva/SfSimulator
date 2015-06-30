@@ -15,13 +15,18 @@ namespace SkfrgSimCommon
 			rnd = new Random();
 		}
 
+        public AbilityDmg GetAbilityDmg(AbilityParams ability, EnvironmentContext context)
+        {
+            return GetAbilityDmg(ability, context.Actor.pStats, context, context.Actor.IsImpulseAvailable);
+        }
+
 		public AbilityDmg GetAbilityDmg(AbilityParams ability, ActorStats stats, EnvironmentContext context, bool IsImpulseAvailable)
 		{
 			double AdditionalAbilityDamage = 0;	// TODO: buffs from amulets
-			double AdditionalAbilityDamagePercent = 0;	// TODO: % buffs to ability damage
-			double TotalDamagePercent = 0;	// TODO: % buffs to the total damage output;
+			double AdditionalAbilityDamageMod = ability.AbilityBonusDmgCoeff;
+            double TotalDamageMod = ability.TotalBonusDmgCoeff;	
 
-			var res = new AbilityDmg();
+            var res = new AbilityDmg();
 
 			// Базовое могущество + массивность
 			var might = stats.Might + stats.Stamina * (0.01 * stats.SolidityPercent);
@@ -52,12 +57,13 @@ namespace SkfrgSimCommon
 			res.isCritical = isCrit;
 			res.isTestinessed = isTestinessed;
 			res.isCrushing = isCrushing;
+            res.isImpulse = IsImpulseAvailable && ability.IsUseImpulse;
 			res.Damage = 
-				 (currentBaseDmg * (isCrushing ? 2 : 1) + currentAddDmg + currentCritDmg) * ability.DmgCoeff * (1 + 0.01 * AdditionalAbilityDamagePercent) +
+				 (currentBaseDmg * (isCrushing ? 2 : 1) + currentAddDmg + currentCritDmg) * ability.DmgCoeff * AdditionalAbilityDamageMod +
 				  AdditionalAbilityDamage +
 				  currentImpulseDmg;
 
-			res.Damage *= (1 + 0.01 * TotalDamagePercent);
+			res.Damage *= TotalDamageMod;
 
 			return res;
 		}
@@ -70,5 +76,6 @@ namespace SkfrgSimCommon
 		public bool isCritical { get; set; }
 		public bool isTestinessed { get; set; }
 		public bool isCrushing { get; set; }
+        public bool isImpulse { get; set; }
 	}
 }

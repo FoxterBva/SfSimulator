@@ -21,18 +21,21 @@ namespace SkfrgSimCommon.Classes
 			};
 
 			IsImpulseAvailable = true;
-			MaxResource = 400;
+			MaxResource = 300;
 			CurrentResource = MaxResource;
 			ResourceRechargeRate = 1000;
 			ResourceRechargeValue = 5;
 		}
 
-		protected override Ability SelectAbility(EnvironmentContext context)
+		protected override string SelectAbility(EnvironmentContext context)
 		{
 			if (previousUsedAbility == null)
-				return UseAbility(AbilityNames.Archer.LongAimedShot);
+				return AbilityNames.Archer.LongAimedShot;
 
-			return UseAbility(AbilityNames.Archer.StandardShot);
+            if (context.Actor.CurrentResource >= Abilities[AbilityNames.Archer.AimedShot].Parameters.ResourceCost)
+                return AbilityNames.Archer.AimedShot;
+
+			return AbilityNames.Archer.StandardShot;
 		}
 	}
 }

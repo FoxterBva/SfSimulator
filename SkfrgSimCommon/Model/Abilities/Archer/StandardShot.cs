@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SkfrgSimCommon.Model.Buffs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace SkfrgSimCommon.Model.Abilities.Archer
 			Parameters = new AbilityParams()
 			{
 				Name = AbilityNames.Archer.StandardShot,
-				CastTime = 250,
+				TotalCastTime = 250,
 				CoolDown = 0,
 				DmgCoeff = 0.25,
 				ImpulseDmgCoeff = 1,
@@ -21,12 +22,13 @@ namespace SkfrgSimCommon.Model.Abilities.Archer
 				ResourceCost = -15
 			};
 		}
-
+        
 		public override void OnCast(EnvironmentContext context)
 		{
 			base.OnCast(context);
 
-			context.ApplyBuffToSource(null);
+            // TODO: if actor has a buff to stacks -> place debuff to the target
+			context.ApplyBuff(new ArcherPristrel());
 		}
 	}
 }

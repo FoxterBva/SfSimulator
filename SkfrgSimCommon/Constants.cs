@@ -13,6 +13,25 @@ namespace SkfrgSimCommon
 		public static double StaminaCoeff = 10;
 	}
 
+    public enum EventType
+    {
+        ResourceGain,
+        ImpulseRefresh,
+        AbilityDamage,
+        DotTick,
+        RemoveBuff,
+        AbilitySelect
+    }
+
+    public class EventPriority
+    {
+        public static int ResourceGain = 2;
+        public static int Damage = 1;
+        public static int AbilitySelect = 0;
+        public static int RemoveBuff = 3;
+        public static int RefreshImpulse = 4;
+    }
+
 	public class AbilityNames
 	{
 		//public static readonly string PaladinLKM = "Удар Праведника";
@@ -32,6 +51,7 @@ namespace SkfrgSimCommon
 			public static readonly string LKMx2PKM = "Карающая молния";
 			public static readonly string PKM = "Волна гнева";
 			public static readonly string Ability4 = "Яростный приговор";
+            public static readonly string HolyGround = "Святая земля";
 		}
 
 		public static class Archer
@@ -42,5 +62,28 @@ namespace SkfrgSimCommon
 			public static readonly string FireArrow = "Горящая стрела";
 			public static readonly string PiercingShot = "Пронзающий выстрел";
 		}
+
+        public static class GuardianOfLight
+        {
+            public static readonly string FlashingSpark = "Мерцающая вспышка";
+            public static readonly string SparkOfAnger = "Искра гнева";
+            public static readonly string StarStorm = "Звездный шторм";
+        }
 	}
+
+    public class BuffNames
+    {
+        public static class Archer
+        {
+            public static readonly string Pristrel = "Пристрел";
+            public static readonly string FireDot = "Огнедот";
+        }
+
+        public static class Paladin
+        {
+            public static readonly string FanaticismTalent = "Фанатизм";
+            public static readonly string DetachmentTalent = "Отрешенность";
+            public static readonly string InflexibilityTalent = "Непреклонность";
+        }
+    }
 }

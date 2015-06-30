@@ -11,13 +11,11 @@ namespace SkfrgSimCommon.Model
 	public abstract class Actor : IActor
 	{
 		EnvironmentContext eContext;
-		ActorStats pStats;
+		public ActorStats pStats;
 		Calculator calc;
 
 		double totalDamage = 0;
-		public double TotalDamage { get { return totalDamage; } }
-
-		public List<ActorBuff> Buffs { get; set; }
+        public double TotalDamage { get; set; }
 
 		public Actor(EnvironmentContext context, ActorStats stats, Calculator clc)
 		{
@@ -26,8 +24,10 @@ namespace SkfrgSimCommon.Model
 			calc = clc;
 			Abilities = new Dictionary<string, Ability>();
 			Buffs = new List<ActorBuff>();
+            Reset();
 		}
 
+        [Obsolete]
 		public void Tick(int time, IDependencyFactory factory)
 		{
 			var logger = factory.GetLogger();
@@ -49,7 +49,7 @@ namespace SkfrgSimCommon.Model
 			// Hit
 			if (LastAbilityUsedAt + LastAbilityUsedCd <= time)
 			{
-				var ability = SelectAbility(eContext);
+				var ability = GetByName(SelectAbility(eContext));
 
 				var dmg = calc.GetAbilityDmg(ability.Parameters, pStats, eContext, IsImpulseAvailable);
 				totalDamage += dmg.Damage;
@@ -68,7 +68,7 @@ namespace SkfrgSimCommon.Model
 				}
 
 				LastAbilityUsedAt = time;
-				LastAbilityUsedCd = ability.Parameters.CastTime;
+				LastAbilityUsedCd = ability.Parameters.TotalCastTime;
 
 				var dmgStr = dmg.Damage.ToString("F0");
 				if (dmg.isCritical)
@@ -94,6 +94,8 @@ namespace SkfrgSimCommon.Model
 			LastAbilityUsedAt = 0;
 			LastAbilityUsedCd = 0;
 			LastResourceRechargeAt = 0;
+            CurrentHp = MaxHp;
+            UsedAbilitiesHistory = new List<string>();
 		}
 
 		string FormatTime(double time)
@@ -106,19 +108,47 @@ namespace SkfrgSimCommon.Model
 		/// <summary>
 		/// Override this method to set specific rotation
 		/// </summary>
-		protected abstract Ability SelectAbility(EnvironmentContext context);
+		protected abstract string SelectAbility(EnvironmentContext context);
 
-		protected Ability UseAbility(string name)
+		protected Ability UseAbility(string name, int time)
 		{
 			var ability = GetByName(name);
-			previousUsedAbility = ability;
-			return ability;
+			return UseAbility(ability, time);
 		}
+
+        protected Ability UseAbility(Ability ability, int time)
+        {
+            ability.OnCast(eContext);
+            previousUsedAbility = ability;
+
+            var currentParams = GetAbilityParams(ability.Parameters.Name);
+            eContext.Events.Add(new SimEvent() { Time = time + currentParams.TotalCastTime, Callback = eContext.SelectAbility, Priority = EventPriority.AbilitySelect, Type = EventType.AbilitySelect });
+
+            UsedAbilitiesHistory.Add(ability.Parameters.Name);
+
+            return ability;
+        }
 
 		protected Ability GetByName(string name)
 		{
 			return Abilities[name];
 		}
+
+        public void SelectAbility(int time)
+        {
+            var ability = SelectAbility(eContext);
+            
+            UseAbility(ability, time);
+        }
+
+        public void GainResource(int time)
+        {
+            if (CurrentResource < MaxResource)
+            {
+                CurrentResource = Math.Min(MaxResource, CurrentResource + ResourceRechargeValue);
+            }
+            eContext.AddGainResource(time + ResourceRechargeRate);
+        }
 
 		public bool IsImpulseAvailable { get; set; }
 		public double MaxResource { get; set; }
@@ -127,10 +157,49 @@ namespace SkfrgSimCommon.Model
 		public double ResourceRechargeValue { get; set; }
 		public int LastResourceRechargeAt { get; set; }
 
+        public double MaxHp { get; set; }
+        public double CurrentHp { get; set; }
+
 		public int LastImpulseUsedAt { get; set; }
 		public int LastAbilityUsedAt { get; set; }
 		public int LastAbilityUsedCd { get; set; }
 
 		public Dictionary<string, Ability> Abilities { get; set; }
+
+        /// <summary>
+        /// Gets ability params affected by buffs
+        /// </summary>
+        public AbilityParams GetAbilityParams(string abilityName)
+        {
+            var ability = Abilities[abilityName];
+            AbilityParams res = ability.CopyParams();
+
+            foreach (var buff in Buffs)
+            {
+                foreach (var eff in buff.Buff.Effects)
+                {
+                    if (eff.IsAppliedTo(res.Name) && eff.Condition(eContext))
+                    {
+                        if (eff.ResourceCost != 0)
+                        {
+                            res.ResourceCost = res.ResourceCost + eff.ResourceCost;
+                            if (res.ResourceCost < 0)
+                                res.ResourceCost = 0;
+                        }
+
+                        if (eff.SkillDamageModPercent > 0)
+                            res.AbilityBonusDmgCoeff = res.AbilityBonusDmgCoeff * (1 + 0.01 * eff.SkillDamageModPercent * buff.Stacks);
+
+                        if (eff.TotalDamageModPercent > 0)
+                            res.TotalBonusDmgCoeff = res.TotalBonusDmgCoeff * (1 + 0.01 * eff.TotalDamageModPercent * buff.Stacks);
+                    }
+                }
+            }
+
+            return res;
+        }
+
+        public List<ActorBuff> Buffs { get; set; }
+        public List<string> UsedAbilitiesHistory { get; set; }
 	}
 }

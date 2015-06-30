@@ -10,6 +10,7 @@ namespace SkfrgSimCommon.Model.Abilities.Archer
 		public PiercingShot()
 			: base()
 		{
+            Parameters = new AbilityParams();
 			Parameters.Name = AbilityNames.Archer.PiercingShot;
 		}
 	}

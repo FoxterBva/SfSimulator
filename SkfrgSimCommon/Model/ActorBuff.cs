@@ -5,10 +5,14 @@ using System.Text;
 
 namespace SkfrgSimCommon.Model
 {
+    /// <summary>
+    /// Buff info with state
+    /// </summary>
 	public class ActorBuff
 	{
-		public ActorBuff()
+		public ActorBuff(Buff buff)
 		{
+            this.buff = buff;
 			Stacks = 1;
 		}
 
@@ -31,5 +35,8 @@ namespace SkfrgSimCommon.Model
 		/// Stacks
 		/// </summary>
 		public int Stacks { get; set; }
+
+        Buff buff;
+        public Buff Buff { get { return buff; } }
 	}
 }

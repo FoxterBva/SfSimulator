@@ -11,7 +11,7 @@ namespace SkfrgSim
 		{
 			Test test = new Test();
 
-			test.SimpleTest();
+			test.EventBasedTest();
 		}
 	}
 }

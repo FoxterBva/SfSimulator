@@ -10,7 +10,10 @@ namespace SkfrgSimCommon.Model.Abilities.Archer
 		public FireArrow()
 			: base()
 		{
-			Parameters.Name = AbilityNames.Archer.FireArrow;
+            Parameters = new AbilityParams()
+            {
+                Name = AbilityNames.Archer.FireArrow
+            };
 		}
 	}
 }

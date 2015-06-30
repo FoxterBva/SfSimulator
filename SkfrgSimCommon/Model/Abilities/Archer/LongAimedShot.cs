@@ -10,7 +10,8 @@ namespace SkfrgSimCommon.Model.Abilities.Archer
 		public LongAimedShot()
 			: base()
 		{
-			Parameters.CastTime = 2000;
+            Parameters = new AbilityParams();
+			Parameters.TotalCastTime = 2000;
 			Parameters.DmgCoeff *= 1.2;
 			Parameters.Name = AbilityNames.Archer.LongAimedShot;
 		}

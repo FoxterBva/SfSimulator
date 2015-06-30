@@ -42,29 +42,46 @@
   <ItemGroup>
     <Compile Include="Calculator.cs" />
     <Compile Include="Classes\Archer.cs" />
+    <Compile Include="Classes\GuardianOfLight.cs" />
     <Compile Include="Classes\Paladin.cs" />
+    <Compile Include="Classes\TargetActor.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Data\BuffList.cs" />
+    <Compile Include="EventProcessor.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="Model\Abilities\Archer\AimedShot.cs" />
     <Compile Include="Model\Abilities\Archer\FireArrow.cs" />
     <Compile Include="Model\Abilities\Archer\LongAimedShot.cs" />
     <Compile Include="Model\Abilities\Archer\PiercingShot.cs" />
     <Compile Include="Model\Abilities\Archer\StandardShot.cs" />
+    <Compile Include="Model\Abilities\GuardianOfLight\FlashingSpark.cs" />
+    <Compile Include="Model\Abilities\GuardianOfLight\SparkOfAnger.cs" />
+    <Compile Include="Model\Abilities\GuardianOfLight\StarStorm.cs" />
+    <Compile Include="Model\Abilities\Paladin\HolyGround.cs" />
+    <Compile Include="Model\Abilities\Paladin\JudgeBlow.cs" />
+    <Compile Include="Model\Abilities\Paladin\PunisherBlow.cs" />
+    <Compile Include="Model\Abilities\Paladin\PunishingLightning.cs" />
+    <Compile Include="Model\Abilities\Paladin\RighteousBlow.cs" />
+    <Compile Include="Model\Abilities\Paladin\SwordOfJustice.cs" />
     <Compile Include="Model\Ability.cs" />
     <Compile Include="Model\AbilityParams.cs" />
     <Compile Include="Model\ActorBuff.cs" />
     <Compile Include="Model\Buff.cs" />
+    <Compile Include="Model\Buffs\ArcherPristrel.cs" />
+    <Compile Include="Model\Buffs\Archer\FireDot.cs" />
+    <Compile Include="Model\Buffs\PaladinHolyGround.cs" />
+    <Compile Include="Model\Buffs\Paladin\InflexibilityTalent.cs" />
+    <Compile Include="Model\Buffs\Paladin\Detachment.cs" />
+    <Compile Include="Model\Buffs\Paladin\Fanaticism.cs" />
     <Compile Include="Model\EnvironmentContext.cs" />
     <Compile Include="Model\IActor.cs" />
     <Compile Include="Model\IDependencyFactory.cs" />
     <Compile Include="Model\Actor.cs" />
     <Compile Include="Model\ActorStats.cs" />
+    <Compile Include="Model\SimEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\Abilities\Paladin\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
