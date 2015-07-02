@@ -156,7 +156,7 @@ namespace SkfrgSimCommon.Model
                 Type = EventType.AbilityDamage,
                 Callback = (t) =>
                     {
-                        var dmg = calc.GetAbilityDmg(ap, this);
+                        var dmg = calc.GetAbilityDmg(ap, this.TargetHpRatio, this.Actor);
                         TargetCurrentHp -= dmg.Damage;
 
                         var dmgStr = dmg.Damage.ToString("F0");

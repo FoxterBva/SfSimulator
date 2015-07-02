@@ -69,6 +69,7 @@
     <Compile Include="Model\Buff.cs" />
     <Compile Include="Model\Buffs\ArcherPristrel.cs" />
     <Compile Include="Model\Buffs\Archer\FireDot.cs" />
+    <Compile Include="Model\Buffs\DotBuff.cs" />
     <Compile Include="Model\Buffs\PaladinHolyGround.cs" />
     <Compile Include="Model\Buffs\Paladin\InflexibilityTalent.cs" />
     <Compile Include="Model\Buffs\Paladin\Detachment.cs" />

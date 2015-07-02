@@ -202,7 +202,7 @@ namespace SkfrgSim
         {
             bool ReadFromFile = true;
             //string fileName = "EvtBasedTest.txt";
-            string fileName = "TestQuery.txt";
+            string fileName = "SingleQuery.txt";
             int maxIterationTime = 1200 * 1000; // 20 min.
 
             bool displaylog = true;

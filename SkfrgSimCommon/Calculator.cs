@@ -15,12 +15,12 @@ namespace SkfrgSimCommon
 			rnd = new Random();
 		}
 
-        public AbilityDmg GetAbilityDmg(AbilityParams ability, EnvironmentContext context)
+        public AbilityDmg GetAbilityDmg(AbilityParams ability, double hpRatio, Actor actor)
         {
-            return GetAbilityDmg(ability, context.Actor.pStats, context, context.Actor.IsImpulseAvailable);
+            return GetAbilityDmg(ability, actor.pStats, hpRatio, actor.IsImpulseAvailable);
         }
 
-		public AbilityDmg GetAbilityDmg(AbilityParams ability, ActorStats stats, EnvironmentContext context, bool IsImpulseAvailable)
+		public AbilityDmg GetAbilityDmg(AbilityParams ability, ActorStats stats, double hpRatio, bool IsImpulseAvailable)
 		{
 			double AdditionalAbilityDamage = 0;	// TODO: buffs from amulets
 			double AdditionalAbilityDamageMod = ability.AbilityBonusDmgCoeff;
@@ -50,7 +50,7 @@ namespace SkfrgSimCommon
 
 			var currentBaseDmg = minBase + rnd.NextDouble() * (maxBase - minBase);
 			var currentCritDmg = isCrit ? stats.Lucky * (1 + stats.LuckyBonus) : 0;
-			var currentAddDmg = isTestinessed ? maxAddDmg : context.TargetHpRatio * maxAddDmg;
+			var currentAddDmg = isTestinessed ? maxAddDmg : hpRatio * maxAddDmg;
 			var currentImpulseDmg = IsImpulseAvailable && ability.IsUseImpulse ? stats.Spirit * (1 + 0.01 * stats.ImpulsePercent + stats.SpiritBonus) * ability.ImpulseDmgCoeff : 0;
 
 			res.AbilityName = ability.Name;

@@ -51,7 +51,7 @@ namespace SkfrgSimCommon.Model
 			{
 				var ability = GetByName(SelectAbility(eContext));
 
-				var dmg = calc.GetAbilityDmg(ability.Parameters, pStats, eContext, IsImpulseAvailable);
+				var dmg = calc.GetAbilityDmg(ability.Parameters, pStats, eContext.TargetHpRatio, IsImpulseAvailable);
 				totalDamage += dmg.Damage;
 				eContext.TargetCurrentHp -= dmg.Damage;
 				CurrentResource = Math.Min(MaxResource, CurrentResource - ability.Parameters.ResourceCost);
