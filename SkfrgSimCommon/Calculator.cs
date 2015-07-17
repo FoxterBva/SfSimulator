@@ -44,16 +44,15 @@ namespace SkfrgSimCommon
 			var maxAddDmg = Constants.BraveCoeff * stats.Brave * (1 + 0.01 * stats.TestinessPercent + stats.BraveBonus);
 
 			// проки
-			bool isCrit = rnd.NextDouble() * 100 <= stats.CritChancePercent;
-			bool isTestinessed = rnd.NextDouble() * 100 <= stats.TestinessPercent;
-			bool isCrushing = rnd.NextDouble() * 100 <= stats.CrushingChancePercent;
+			bool isCrit = stats.CritChancePercent > 0 && rnd.NextDouble() * 100 <= stats.CritChancePercent;
+			bool isTestinessed = stats.TestinessPercent > 0 && rnd.NextDouble() * 100 <= stats.TestinessPercent;
+			bool isCrushing = stats.CrushingChancePercent > 0 && rnd.NextDouble() * 100 <= stats.CrushingChancePercent;
 
 			var currentBaseDmg = minBase + rnd.NextDouble() * (maxBase - minBase);
-			var currentCritDmg = isCrit ? stats.Lucky * (1 + stats.LuckyBonus) : 0;
+			var currentCritDmg = isCrit ? Constants.CritCoeff * stats.Lucky * (1 + stats.LuckyBonus) : 0;
 			var currentAddDmg = isTestinessed ? maxAddDmg : hpRatio * maxAddDmg;
 			var currentImpulseDmg = IsImpulseAvailable && ability.IsUseImpulse ? stats.Spirit * (1 + 0.01 * stats.ImpulsePercent + stats.SpiritBonus) * ability.ImpulseDmgCoeff : 0;
 
-			res.AbilityName = ability.Name;
 			res.isCritical = isCrit;
 			res.isTestinessed = isTestinessed;
 			res.isCrushing = isCrushing;
@@ -64,6 +63,7 @@ namespace SkfrgSimCommon
 				  currentImpulseDmg;
 
 			res.Damage *= TotalDamageMod;
+			res.ImpulseDamage = currentImpulseDmg * TotalDamageMod;
 
 			return res;
 		}
@@ -71,8 +71,15 @@ namespace SkfrgSimCommon
 
 	public class AbilityDmg
 	{
-		public string AbilityName { get; set; }
+		/// <summary>
+		/// Total damage (includes impulse part)
+		/// </summary>
 		public double Damage { get; set; }
+
+		/// <summary>
+		/// Impulse related part of the damage
+		/// </summary>
+		public double ImpulseDamage { get; set; }
 		public bool isCritical { get; set; }
 		public bool isTestinessed { get; set; }
 		public bool isCrushing { get; set; }

@@ -79,6 +79,11 @@ namespace SkfrgSimCommon.Model
             Actor.SelectAbility(time);
         }
 
+		public void AddSelectAbility(int nextTime)
+		{
+			Events.Add(new SimEvent() { Time = nextTime, Callback = SelectAbility, Priority = EventPriority.AbilitySelect, Type = EventType.AbilitySelect });
+		}
+
         public void DeleteBuff()
         { }
 
@@ -90,7 +95,8 @@ namespace SkfrgSimCommon.Model
         public void GainResource(int time)
         {
             Actor.GainResource(time);
-            LogInfo(String.Format("({0}) Gained resource. ", Actor.CurrentResource));
+			Actor.AddHistoryEvent(new LogEvent(CurrentTime, LogEventType.ResourceTick, "ResourceTick", null));
+            LogInfo(String.Format("({0}) тик востановления ресурса. ", Actor.CurrentResource.ToString().PadLeft(3, '0')));
         }
 
         public void ApplyBuff(Buff buff)
@@ -101,7 +107,8 @@ namespace SkfrgSimCommon.Model
                 if (existed.Stacks < existed.Buff.MaxStack)
                 {
                     existed.Stacks++;
-                    LogInfo("Applied stack " + existed.Stacks.ToString() + " for " + buff.Name);
+                    LogInfo("Получен стак " + existed.Stacks.ToString() + " для " + buff.Name);
+					Actor.AddHistoryEvent(new LogEvent(CurrentTime, LogEventType.BuffRefresh, buff.Name, null));
                 }
 
                 if (buff.DurationSec > 0)
@@ -112,7 +119,8 @@ namespace SkfrgSimCommon.Model
                     {
                         delEvent.Time = CurrentTime + buff.DurationSec * 1000;
                     }
-                    LogInfo("Extended duration for " + buff.Name);
+                    LogInfo("Обновлена длительность эффекта " + buff.Name);
+					Actor.AddHistoryEvent(new LogEvent(CurrentTime, LogEventType.BuffRefresh, buff.Name, null));
                 }
             }
             else
@@ -130,14 +138,16 @@ namespace SkfrgSimCommon.Model
                         Parameter = abuff.Buff.Name
                     });
                 }
-                LogInfo("Gained buff " + buff.Name);
+                LogInfo("Получен эффект " + buff.Name);
+				Actor.AddHistoryEvent(new LogEvent(CurrentTime, LogEventType.BuffGain, buff.Name, null));
             }
         }
 
         public void RemoveBuff(ActorBuff buff)
         {
             Actor.Buffs.Remove(buff);
-            LogInfo("Loses buff " + buff.Buff.Name);
+            LogInfo("Потерян эффект " + buff.Buff.Name);
+			Actor.AddHistoryEvent(new LogEvent(CurrentTime, LogEventType.BuffLose, buff.Buff.Name, null));
         }
 
         public void ApplyDamage(Ability a)
@@ -166,8 +176,9 @@ namespace SkfrgSimCommon.Model
                             dmgStr = "^" + dmgStr + "^";
                         if (dmg.isTestinessed)
                             dmgStr = "+" + dmgStr + "+";
-                        
-                        LogInfo(String.Format("({3}) {0} by {1}{4}. Hp:{2}", ap.Name, dmgStr, TargetCurrentHp.ToString("F0"), Actor.CurrentResource, dmg.isImpulse ? " (impls)" : ""));
+
+						LogInfo(String.Format("({3}) ## {0} на {1}{4}. Hp:{2}", ap.Name, dmgStr, TargetCurrentHp.ToString("F0"), Actor.CurrentResource.ToString().PadLeft(3, '0'), dmg.isImpulse ? String.Format(" ({0:F0} + {1} импульс)", dmg.Damage - dmg.ImpulseDamage, dmg.ImpulseDamage) : ""));
+						Actor.AddHistoryEvent(new LogEvent(CurrentTime, LogEventType.AbilityDamage, ap.Name, dmg));
                         Actor.TotalDamage += dmg.Damage;
 
                         if (dmg.isImpulse)
@@ -188,7 +199,8 @@ namespace SkfrgSimCommon.Model
         void RefreshImpulse(int time)
         {
             Actor.IsImpulseAvailable = true;
-            LogInfo("Impulse refreshed");
+            LogInfo("Импульс обновлен");
+			Actor.AddHistoryEvent(new LogEvent(CurrentTime, LogEventType.ImpulseRefresh, "ImpulseRefresh", null));
         }
 
         #endregion

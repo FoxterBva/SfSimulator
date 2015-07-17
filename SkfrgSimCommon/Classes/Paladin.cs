@@ -18,7 +18,8 @@ namespace SkfrgSimCommon.Classes
 				{ AbilityNames.Paladin.LKMx3, new JudgeBlow() },
 				{ AbilityNames.Paladin.LKMx4, new SwordOfJustice() },
 				{ AbilityNames.Paladin.LKMx2PKM, new PunishingLightning() },
-                { AbilityNames.Paladin.HolyGround, new HolyGround() }
+				{ AbilityNames.Paladin.HolyGround, new HolyGround() },
+				{ AbilityNames.Paladin.Ability4, new FuriousJudgement() }
 			};
 
 			MaxResource = 400;
@@ -30,6 +31,11 @@ namespace SkfrgSimCommon.Classes
         string prevComboAbility = null;
 		protected override string SelectAbility(EnvironmentContext context)
 		{
+			if (!Abilities[AbilityNames.Paladin.Ability4].IsOnCd(context.CurrentTime) && prevComboAbility == null)
+			{
+				return AbilityNames.Paladin.Ability4;
+			}
+
             if (prevComboAbility == null)
 			{
                 prevComboAbility = AbilityNames.Paladin.LKM;
@@ -38,7 +44,7 @@ namespace SkfrgSimCommon.Classes
 
 			if (prevComboAbility == AbilityNames.Paladin.LKMx3)
 			{
-                prevComboAbility = AbilityNames.Paladin.LKMx4;
+                prevComboAbility = null;
 				return AbilityNames.Paladin.LKMx4;
 			}
 
@@ -53,9 +59,9 @@ namespace SkfrgSimCommon.Classes
             if (prevComboAbility == AbilityNames.Paladin.LKMx2)
 			{
 				var lightningCurrentParams = GetAbilityParams(AbilityNames.Paladin.LKMx2PKM);
-                if (CurrentResource >= lightningCurrentParams.ResourceCost /* || Buffs.Any(b => b.Buff.Name == "Святая земля")*/)
+                if (CurrentResource >= lightningCurrentParams.ResourceCost)
                 {
-                    prevComboAbility = AbilityNames.Paladin.LKMx2PKM;
+                    prevComboAbility = null;
                     return AbilityNames.Paladin.LKMx2PKM;
                 }
                 else

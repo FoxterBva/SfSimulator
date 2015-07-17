@@ -95,7 +95,7 @@ namespace SkfrgSimCommon.Model
 			LastAbilityUsedCd = 0;
 			LastResourceRechargeAt = 0;
             CurrentHp = MaxHp;
-            UsedAbilitiesHistory = new List<string>();
+			CombatlogHistory = new List<LogEvent>();
 		}
 
 		string FormatTime(double time)
@@ -122,9 +122,10 @@ namespace SkfrgSimCommon.Model
             previousUsedAbility = ability;
 
             var currentParams = GetAbilityParams(ability.Parameters.Name);
-            eContext.Events.Add(new SimEvent() { Time = time + currentParams.TotalCastTime, Callback = eContext.SelectAbility, Priority = EventPriority.AbilitySelect, Type = EventType.AbilitySelect });
+            //eContext.Events.Add(new SimEvent() { Time = time + currentParams.TotalCastTime, Callback = eContext.SelectAbility, Priority = EventPriority.AbilitySelect, Type = EventType.AbilitySelect });
+			eContext.AddSelectAbility(time + currentParams.TotalCastTime);
 
-            UsedAbilitiesHistory.Add(ability.Parameters.Name);
+			AddHistoryEvent(new LogEvent(time, LogEventType.AbilityCast, ability.Parameters.Name, null));
 
             return ability;
         }
@@ -148,6 +149,7 @@ namespace SkfrgSimCommon.Model
                 CurrentResource = Math.Min(MaxResource, CurrentResource + ResourceRechargeValue);
             }
             eContext.AddGainResource(time + ResourceRechargeRate);
+			AddHistoryEvent(new LogEvent(time, LogEventType.ResourceTick, "", null));
         }
 
 		public bool IsImpulseAvailable { get; set; }
@@ -199,7 +201,44 @@ namespace SkfrgSimCommon.Model
             return res;
         }
 
+		public void AddHistoryEvent(LogEvent evt)
+		{
+			CombatlogHistory.Add(evt);
+		}
+
         public List<ActorBuff> Buffs { get; set; }
-        public List<string> UsedAbilitiesHistory { get; set; }
+		public List<LogEvent> CombatlogHistory { get; set; }
+	}
+
+	public class LogEvent
+	{
+		public LogEvent()
+		{ }
+
+		public LogEvent(int time, LogEventType type, string abilityName, object det) 
+			: this()
+		{
+			Time = time;
+			Type = type;
+			AbilityName = abilityName;
+			Details = det;
+		}
+
+		public string AbilityName { get; set; }
+		public int Time { get; set; }
+		public LogEventType Type { get; set; }
+		public object Details { get; set; }
+	}
+
+	public enum LogEventType
+	{ 
+		AbilityCast,
+		AbilityDamage,
+		AbilityDotDamage,
+		BuffGain,
+		BuffRefresh,
+		BuffLose,
+		ImpulseRefresh,
+		ResourceTick
 	}
 }

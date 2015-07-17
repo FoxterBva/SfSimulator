@@ -9,6 +9,8 @@ namespace SkfrgSim
 	{
 		static void Main(string[] args)
 		{
+			System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+
 			Test test = new Test();
 
 			test.EventBasedTest();

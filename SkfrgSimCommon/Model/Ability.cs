@@ -12,6 +12,7 @@ namespace SkfrgSimCommon.Model
 	{
 		public Ability()
 		{
+			Parameters = new AbilityParams();
 			LastExecutedAt = -1;
 		}
 

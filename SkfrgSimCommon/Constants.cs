@@ -11,6 +11,7 @@ namespace SkfrgSimCommon
 		public static double StrCoeff = 0.2;
 		public static double BraveCoeff = 0.2;
 		public static double StaminaCoeff = 10;
+		public static double CritCoeff = (double)2/3;
 	}
 
     public enum EventType
