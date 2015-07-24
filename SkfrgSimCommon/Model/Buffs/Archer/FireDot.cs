@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SkfrgSimCommon.Model.Buffs.Archer
 {
-    class FireDot : Buff
+    public class FireDot : Buff
     {
         public FireDot()
             : base()
@@ -13,6 +13,15 @@ namespace SkfrgSimCommon.Model.Buffs.Archer
             this.DurationSec = 12;
             this.Name = BuffNames.Archer.FireDot;
             this.MaxStack = 1;
+			this.IsDot = true;
+			this.Effects = new List<BuffEffect>()
+            {
+                new BuffEffect()
+                {
+                    ResourceCost = -1000,
+                    IsAppliedTo = (name) => name == AbilityNames.Archer.FireShelling
+                }
+            };
         }
     }
 }

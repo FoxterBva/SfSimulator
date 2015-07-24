@@ -381,10 +381,12 @@ namespace SkfrgSim
 
         static Actor CreatePlayer(EnvironmentContext context, ActorStats stats, Calculator calc)
         {
-            var player = new Paladin(context, stats, calc);
-            player.Buffs.Add(new ActorBuff(new buffs.Paladin.Inflexibility()));
-            player.Buffs.Add(new ActorBuff(new buffs.Paladin.Fanaticism()));
-            player.Buffs.Add(new ActorBuff(new buffs.Paladin.Detachment()));
+			//var player = new Paladin(context, stats, calc);
+			//player.Buffs.Add(new ActorBuff(new buffs.Paladin.Inflexibility()));
+			//player.Buffs.Add(new ActorBuff(new buffs.Paladin.Fanaticism()));
+			//player.Buffs.Add(new ActorBuff(new buffs.Paladin.Detachment()));
+
+			var player = new Archer(context, stats, calc);
 
             return player;
         }

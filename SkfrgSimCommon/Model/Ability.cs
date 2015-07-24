@@ -20,15 +20,19 @@ namespace SkfrgSimCommon.Model
 		
 		public AbilityParams Parameters { get; set; }
 
+		/// <summary>
+		/// Fired on ability cast
+		/// </summary>
+		/// <param name="context"></param>
 		public virtual void OnCast(EnvironmentContext context)
 		{
             var currentParams = context.Actor.GetAbilityParams(this.Parameters.Name);
 
             // if cost < 0 -> this abiliy regens resource
-            if (currentParams.ResourceCost < 0 && context.Actor.CurrentResource < context.Actor.MaxResource)
-                context.Actor.CurrentResource = Math.Min(context.Actor.MaxResource, context.Actor.CurrentResource - currentParams.ResourceCost);
+            if (currentParams.BaseParams.ResourceCost < 0 && context.Actor.CurrentResource < context.Actor.MaxResource)
+				context.Actor.CurrentResource = Math.Min(context.Actor.MaxResource, context.Actor.CurrentResource - currentParams.BaseParams.ResourceCost);
 
-            var abilityCost = currentParams.ResourceCost;
+			var abilityCost = currentParams.BaseParams.ResourceCost;
             
 
             if (abilityCost < 0)
@@ -39,8 +43,22 @@ namespace SkfrgSimCommon.Model
 
             LastExecutedAt = context.CurrentTime;
 
-            if (currentParams.DmgCoeff > 0)
-                context.ApplyDamage(this);
+			if (currentParams.BaseParams.DmgCoeff > 0)
+			{
+				if (currentParams.BaseParams.Ticks == 1)
+					context.ApplyDamage(this);
+				else if (currentParams.BaseParams.IsMultihit)
+					context.ApplyMultiDamage(this);
+			}
+		}
+
+		/// <summary>
+		/// Fired on ability damage
+		/// </summary>
+		/// <param name="context"></param>
+		public virtual void OnDamage(EnvironmentContext context)
+		{ 
+
 		}
 
         public bool IsOnCd(int currTime)
@@ -50,17 +68,7 @@ namespace SkfrgSimCommon.Model
 
         public AbilityParams CopyParams()
         {
-            AbilityParams p = new AbilityParams()
-            {
-                CoolDown = Parameters.CoolDown,
-                DmgCoeff = Parameters.DmgCoeff,
-                DmgDelay = Parameters.DmgDelay,
-                ImpulseDmgCoeff = Parameters.ImpulseDmgCoeff,
-                IsUseImpulse = Parameters.IsUseImpulse,
-                Name = Parameters.Name,
-                ResourceCost = Parameters.ResourceCost,
-                TotalCastTime = Parameters.TotalCastTime
-            };
+			AbilityParams p = Parameters.GetCopy();
 
             return p;
         }

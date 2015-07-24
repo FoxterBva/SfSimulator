@@ -19,7 +19,7 @@ namespace SkfrgSimCommon.Model
 		/// <summary>
 		/// Buff name
 		/// </summary>
-		public string Name { get; set; }
+		//public string Name { get; set; }
 
 		/// <summary>
 		/// Time of buff aplication
@@ -38,5 +38,15 @@ namespace SkfrgSimCommon.Model
 
         Buff buff;
         public Buff Buff { get { return buff; } }
+
+		/// <summary>
+		/// State of ability parameters on buff application
+		/// </summary>
+		public ExtendedAbilityParams AbilityParams { get; set; }
+
+		/// <summary>
+		/// Actor stats
+		/// </summary>
+		public ActorStats ActorStats { get; set; }
 	}
 }

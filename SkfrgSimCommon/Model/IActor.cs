@@ -7,6 +7,6 @@ namespace SkfrgSimCommon.Model
 {
 	public interface IActor
 	{
-		void Tick(int time, IDependencyFactory factory);
+		
 	}
 }

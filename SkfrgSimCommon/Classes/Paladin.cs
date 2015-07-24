@@ -59,7 +59,7 @@ namespace SkfrgSimCommon.Classes
             if (prevComboAbility == AbilityNames.Paladin.LKMx2)
 			{
 				var lightningCurrentParams = GetAbilityParams(AbilityNames.Paladin.LKMx2PKM);
-                if (CurrentResource >= lightningCurrentParams.ResourceCost)
+                if (CurrentResource >= lightningCurrentParams.BaseParams.ResourceCost)
                 {
                     prevComboAbility = null;
                     return AbilityNames.Paladin.LKMx2PKM;

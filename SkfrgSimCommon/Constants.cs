@@ -62,6 +62,7 @@ namespace SkfrgSimCommon
 			public static readonly string StandardShot = "Обычный выстрел";
 			public static readonly string FireArrow = "Горящая стрела";
 			public static readonly string PiercingShot = "Пронзающий выстрел";
+			public static readonly string FireShelling = "Огненный обстрел";
 		}
 
         public static class GuardianOfLight
@@ -78,6 +79,7 @@ namespace SkfrgSimCommon
         {
             public static readonly string Pristrel = "Пристрел";
             public static readonly string FireDot = "Огнедот";
+			public static readonly string FireShellingBuff = "Прок обстрела";
         }
 
         public static class Paladin

@@ -29,5 +29,10 @@ namespace SkfrgSimCommon.Model
             else
                 return this.Time.CompareTo(evt2.Time);
         }
+
+		public override string ToString()
+		{
+			return String.Format("[{0:0000.00}] {1} {2} P:'{3}'", (double)Time / 1000, Priority, Type, Parameter);
+		}
     }
 }

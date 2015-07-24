@@ -28,7 +28,7 @@ namespace SkfrgSimCommon.Model.Abilities.Archer
 			base.OnCast(context);
 
             // TODO: if actor has a buff to stacks -> place debuff to the target
-			context.ApplyBuff(new ArcherPristrel());
+			context.ApplyBuff(new ArcherPristrel(), this.Parameters.Name);
 		}
 	}
 }

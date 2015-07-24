@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SkfrgSimCommon.Model.Buffs.Archer;
 
 namespace SkfrgSimCommon.Model.Abilities.Archer
 {
 	public class AimedShot : Ability
 	{
-		Random rnd;
+		protected Random rnd;
 
 		public AimedShot() : base()
 		{
@@ -29,9 +30,9 @@ namespace SkfrgSimCommon.Model.Abilities.Archer
 		{
 			base.OnCast(context);
 
-			if (rnd.Next() <= 0.2)
+			if (rnd.NextDouble() <= 0.2)
 			{
-				//context.ApplyBuffToSource(null);
+				context.ApplyBuff(new FireShellingBuff(), this.Parameters.Name);
 			}
 		}
 	}

@@ -52,6 +52,7 @@
     <Compile Include="ILogger.cs" />
     <Compile Include="Model\Abilities\Archer\AimedShot.cs" />
     <Compile Include="Model\Abilities\Archer\FireArrow.cs" />
+    <Compile Include="Model\Abilities\Archer\FireShelling.cs" />
     <Compile Include="Model\Abilities\Archer\LongAimedShot.cs" />
     <Compile Include="Model\Abilities\Archer\PiercingShot.cs" />
     <Compile Include="Model\Abilities\Archer\StandardShot.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Model\Buff.cs" />
     <Compile Include="Model\Buffs\ArcherPristrel.cs" />
     <Compile Include="Model\Buffs\Archer\FireDot.cs" />
+    <Compile Include="Model\Buffs\Archer\FireShellingBuff.cs" />
     <Compile Include="Model\Buffs\DotBuff.cs" />
     <Compile Include="Model\Buffs\PaladinHolyGround.cs" />
     <Compile Include="Model\Buffs\Paladin\InflexibilityTalent.cs" />

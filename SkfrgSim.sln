@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkfrgSim", "SkfrgSim\SkfrgS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkfrgSimCommon", "SkfrgSimCommon\SkfrgSimCommon.csproj", "{1E2D7ADF-0ADC-4C32-A6AB-A2ABC620D08E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkfrgSimUI", "SkfrgSimUI\SkfrgSimUI.csproj", "{C61E186B-EFB3-49B1-ABCB-11F0587ABE43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,16 @@ Global
 		{1E2D7ADF-0ADC-4C32-A6AB-A2ABC620D08E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{1E2D7ADF-0ADC-4C32-A6AB-A2ABC620D08E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1E2D7ADF-0ADC-4C32-A6AB-A2ABC620D08E}.Release|x86.ActiveCfg = Release|Any CPU
+		{C61E186B-EFB3-49B1-ABCB-11F0587ABE43}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{C61E186B-EFB3-49B1-ABCB-11F0587ABE43}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{C61E186B-EFB3-49B1-ABCB-11F0587ABE43}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{C61E186B-EFB3-49B1-ABCB-11F0587ABE43}.Debug|x86.ActiveCfg = Debug|x86
+		{C61E186B-EFB3-49B1-ABCB-11F0587ABE43}.Debug|x86.Build.0 = Debug|x86
+		{C61E186B-EFB3-49B1-ABCB-11F0587ABE43}.Release|Any CPU.ActiveCfg = Release|x86
+		{C61E186B-EFB3-49B1-ABCB-11F0587ABE43}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{C61E186B-EFB3-49B1-ABCB-11F0587ABE43}.Release|Mixed Platforms.Build.0 = Release|x86
+		{C61E186B-EFB3-49B1-ABCB-11F0587ABE43}.Release|x86.ActiveCfg = Release|x86
+		{C61E186B-EFB3-49B1-ABCB-11F0587ABE43}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

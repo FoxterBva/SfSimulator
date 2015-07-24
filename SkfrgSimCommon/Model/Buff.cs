@@ -10,6 +10,7 @@ namespace SkfrgSimCommon.Model
         public Buff()
         {
             Effects = new List<BuffEffect>();
+			IsDot = false;
         }
 
 		public string Name { get; set; }
@@ -31,6 +32,8 @@ namespace SkfrgSimCommon.Model
 
         // TODO: affected abilities
         public List<BuffEffect> Effects { get; set; }
+
+		public bool IsDot { get; set; }
 
 	}
 

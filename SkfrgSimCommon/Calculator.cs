@@ -15,14 +15,14 @@ namespace SkfrgSimCommon
 			rnd = new Random();
 		}
 
-        public AbilityDmg GetAbilityDmg(AbilityParams ability, double hpRatio, Actor actor)
+        public AbilityDmg GetAbilityDmg(ExtendedAbilityParams ability, double hpRatio, Actor actor)
         {
             return GetAbilityDmg(ability, actor.pStats, hpRatio, actor.IsImpulseAvailable);
         }
 
-		public AbilityDmg GetAbilityDmg(AbilityParams ability, ActorStats stats, double hpRatio, bool IsImpulseAvailable)
+		public AbilityDmg GetAbilityDmg(ExtendedAbilityParams ability, ActorStats stats, double hpRatio, bool IsImpulseAvailable)
 		{
-			double AdditionalAbilityDamage = 0;	// TODO: buffs from amulets
+			double AdditionalAbilityDamage = ability.AdditionalAbilityDamage;
 			double AdditionalAbilityDamageMod = ability.AbilityBonusDmgCoeff;
             double TotalDamageMod = ability.TotalBonusDmgCoeff;	
 
@@ -51,14 +51,14 @@ namespace SkfrgSimCommon
 			var currentBaseDmg = minBase + rnd.NextDouble() * (maxBase - minBase);
 			var currentCritDmg = isCrit ? Constants.CritCoeff * stats.Lucky * (1 + stats.LuckyBonus) : 0;
 			var currentAddDmg = isTestinessed ? maxAddDmg : hpRatio * maxAddDmg;
-			var currentImpulseDmg = IsImpulseAvailable && ability.IsUseImpulse ? stats.Spirit * (1 + 0.01 * stats.ImpulsePercent + stats.SpiritBonus) * ability.ImpulseDmgCoeff : 0;
+			var currentImpulseDmg = IsImpulseAvailable && ability.BaseParams.IsUseImpulse ? stats.Spirit * (1 + 0.01 * stats.ImpulsePercent + stats.SpiritBonus) * ability.BaseParams.ImpulseDmgCoeff : 0;
 
 			res.isCritical = isCrit;
 			res.isTestinessed = isTestinessed;
 			res.isCrushing = isCrushing;
-            res.isImpulse = IsImpulseAvailable && ability.IsUseImpulse;
-			res.Damage = 
-				 (currentBaseDmg * (isCrushing ? 2 : 1) + currentAddDmg + currentCritDmg) * ability.DmgCoeff * AdditionalAbilityDamageMod +
+			res.isImpulse = IsImpulseAvailable && ability.BaseParams.IsUseImpulse;
+			res.Damage =
+				 (currentBaseDmg * (isCrushing ? 2 : 1) + currentAddDmg + currentCritDmg) * ability.BaseParams.DmgCoeff / ability.BaseParams.Ticks * AdditionalAbilityDamageMod +
 				  AdditionalAbilityDamage +
 				  currentImpulseDmg;
 

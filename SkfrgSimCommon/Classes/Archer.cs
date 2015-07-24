@@ -18,6 +18,7 @@ namespace SkfrgSimCommon.Classes
 				{ AbilityNames.Archer.FireArrow, new FireArrow() },
 				{ AbilityNames.Archer.PiercingShot, new PiercingShot() },
 				{ AbilityNames.Archer.LongAimedShot, new LongAimedShot() },
+				{ AbilityNames.Archer.FireShelling, new FireShelling() },
 			};
 
 			IsImpulseAvailable = true;
@@ -32,7 +33,26 @@ namespace SkfrgSimCommon.Classes
 			if (previousUsedAbility == null)
 				return AbilityNames.Archer.LongAimedShot;
 
-            if (context.Actor.CurrentResource >= Abilities[AbilityNames.Archer.AimedShot].Parameters.ResourceCost)
+			var fireDot = Buffs.FirstOrDefault(b => b.Buff.Name == BuffNames.Archer.FireDot);
+
+			if (fireDot == null)
+			{
+				var p = context.Actor.GetAbilityParams(AbilityNames.Archer.FireArrow);
+
+				if (context.Actor.CurrentResource >= p.BaseParams.ResourceCost)
+					return AbilityNames.Archer.FireArrow;
+			}
+
+			if (Buffs.FirstOrDefault(b => b.Buff.Name == BuffNames.Archer.FireShellingBuff) != null)
+			{ 
+				var shelling = context.Actor.GetAbilityParams(AbilityNames.Archer.FireShelling);
+				if (fireDot != null && fireDot.EndTime > context.CurrentTime + shelling.BaseParams.TotalCastTime)
+				{
+					return AbilityNames.Archer.FireShelling;
+				}
+			}
+
+			if (context.Actor.CurrentResource >= context.Actor.GetAbilityParams(AbilityNames.Archer.AimedShot).BaseParams.ResourceCost)
                 return AbilityNames.Archer.AimedShot;
 
 			return AbilityNames.Archer.StandardShot;

@@ -13,5 +13,32 @@ namespace SkfrgSimCommon.Model.Abilities.Archer
             Parameters = new AbilityParams();
 			Parameters.Name = AbilityNames.Archer.PiercingShot;
 		}
+
+		public override void OnCast(EnvironmentContext context)
+		{
+			base.OnCast(context);
+
+			// Если талант + нет дебаффа + огнедот -> снять огнедот и увеличить урон.
+			var fireDot = context.Actor.Buffs.FirstOrDefault(b => b.Buff.Name == BuffNames.Archer.FireDot);
+			if (fireDot != null && fireDot.EndTime - context.CurrentTime >= Parameters.DmgDelay)
+			{
+			    // context.ApplyBuff(null, Parameters.Name);	// бафф увеличения дамага пронзающего
+			}
+		}
+
+		public override void OnDamage(EnvironmentContext context)
+		{
+			base.OnDamage(context);
+
+			var fireDot = context.Actor.Buffs.FirstOrDefault(b => b.Buff.Name == BuffNames.Archer.FireDot);
+			if (fireDot != null)
+			{
+				context.RemoveBuff(fireDot);
+				// context.ApplyBuff(null, Parameters.Name);	// дебафф
+
+				// TODO:
+				//context.RemoveBuff(null);	// бафф увеличения дамага пронзающего
+			}
+		}
 	}
 }

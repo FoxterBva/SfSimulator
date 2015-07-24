@@ -5,6 +5,10 @@ using System.Text;
 
 namespace SkfrgSimCommon.Model
 {
+	/// <summary>
+	/// Represents constant actor stats
+	/// TODO: possibly add possibility to emulate externals stats increase (like from Alchemist/HS)
+	/// </summary>
 	public class ActorStats
 	{
 		/// <summary>

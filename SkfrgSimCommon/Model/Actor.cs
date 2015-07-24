@@ -14,8 +14,7 @@ namespace SkfrgSimCommon.Model
 		public ActorStats pStats;
 		Calculator calc;
 
-		double totalDamage = 0;
-        public double TotalDamage { get; set; }
+		public double TotalDamage { get; set; }
 
 		public Actor(EnvironmentContext context, ActorStats stats, Calculator clc)
 		{
@@ -27,69 +26,11 @@ namespace SkfrgSimCommon.Model
             Reset();
 		}
 
-        [Obsolete]
-		public void Tick(int time, IDependencyFactory factory)
-		{
-			var logger = factory.GetLogger();
-
-			if (!IsImpulseAvailable && time - LastImpulseUsedAt >= 10000 * (1 - 0.01 * pStats.ImpulsePercent))
-			{
-				LastImpulseUsedAt = 0;
-				IsImpulseAvailable = true;
-				logger.Log(FormatTime(time) + " Impulse refreshed");
-			}
-
-			if (time - LastResourceRechargeAt >= ResourceRechargeRate && MaxResource > CurrentResource)
-			{
-				LastResourceRechargeAt = time;
-				CurrentResource = Math.Min(MaxResource, CurrentResource + ResourceRechargeValue);
-				logger.Log(FormatTime(time) + String.Format("[{0,3}] Gain resource", CurrentResource));
-			}
-
-			// Hit
-			if (LastAbilityUsedAt + LastAbilityUsedCd <= time)
-			{
-				var ability = GetByName(SelectAbility(eContext));
-
-				var dmg = calc.GetAbilityDmg(ability.Parameters, pStats, eContext.TargetHpRatio, IsImpulseAvailable);
-				totalDamage += dmg.Damage;
-				eContext.TargetCurrentHp -= dmg.Damage;
-				CurrentResource = Math.Min(MaxResource, CurrentResource - ability.Parameters.ResourceCost);
-
-				if (CurrentResource < 0)
-					throw new InvalidOperationException("Current Resource couldn't become negative.");
-
-				bool impulseUsed = false;
-				if (ability.Parameters.IsUseImpulse && IsImpulseAvailable)
-				{
-					IsImpulseAvailable = false;
-					LastImpulseUsedAt = time;
-					impulseUsed = true;
-				}
-
-				LastAbilityUsedAt = time;
-				LastAbilityUsedCd = ability.Parameters.TotalCastTime;
-
-				var dmgStr = dmg.Damage.ToString("F0");
-				if (dmg.isCritical)
-					dmgStr = "*" + dmgStr + "*";
-				if (dmg.isCrushing)
-					dmgStr = "^" + dmgStr + "^";
-				if (dmg.isTestinessed)
-					dmgStr = "+" + dmgStr + "+";  
-
-				logger.Log(FormatTime(time) + String.Format("[{6,3}] hits target by {0} with \"{1}\" ({2}){3}. Target hp is: {4:0}/{5:0}.", dmgStr, ability.Parameters.Name, impulseUsed ? "impulse" : "", "", eContext.TargetCurrentHp, eContext.TargetMaxHp, CurrentResource));
-
-				ability.OnCast(eContext);
-			}
-		}
-
 		public void Reset()
 		{
 			IsImpulseAvailable = true;
 			CurrentResource = MaxResource;
 			previousUsedAbility = null;
-			totalDamage = 0;
 			LastImpulseUsedAt = 0;
 			LastAbilityUsedAt = 0;
 			LastAbilityUsedCd = 0;
@@ -123,7 +64,7 @@ namespace SkfrgSimCommon.Model
 
             var currentParams = GetAbilityParams(ability.Parameters.Name);
             //eContext.Events.Add(new SimEvent() { Time = time + currentParams.TotalCastTime, Callback = eContext.SelectAbility, Priority = EventPriority.AbilitySelect, Type = EventType.AbilitySelect });
-			eContext.AddSelectAbility(time + currentParams.TotalCastTime);
+			eContext.AddSelectAbility(time + currentParams.BaseParams.TotalCastTime);
 
 			AddHistoryEvent(new LogEvent(time, LogEventType.AbilityCast, ability.Parameters.Name, null));
 
@@ -171,22 +112,22 @@ namespace SkfrgSimCommon.Model
         /// <summary>
         /// Gets ability params affected by buffs
         /// </summary>
-        public AbilityParams GetAbilityParams(string abilityName)
+        public ExtendedAbilityParams GetAbilityParams(string abilityName)
         {
             var ability = Abilities[abilityName];
-            AbilityParams res = ability.CopyParams();
+            ExtendedAbilityParams res = new ExtendedAbilityParams(ability.CopyParams());
 
             foreach (var buff in Buffs)
             {
                 foreach (var eff in buff.Buff.Effects)
                 {
-                    if (eff.IsAppliedTo(res.Name) && eff.Condition(eContext))
+                    if (eff.IsAppliedTo(res.BaseParams.Name) && eff.Condition(eContext))
                     {
                         if (eff.ResourceCost != 0)
                         {
-                            res.ResourceCost = res.ResourceCost + eff.ResourceCost;
-                            if (res.ResourceCost < 0)
-                                res.ResourceCost = 0;
+							res.BaseParams.ResourceCost = res.BaseParams.ResourceCost + eff.ResourceCost;
+							if (res.BaseParams.ResourceCost < 0)
+								res.BaseParams.ResourceCost = 0;
                         }
 
                         if (eff.SkillDamageModPercent > 0)
@@ -197,6 +138,9 @@ namespace SkfrgSimCommon.Model
                     }
                 }
             }
+
+			// TODO: include additional damage from the amulets. 
+			// TODO: How to process random/specific amulet buffs, like: has a 25% chance to increase xx dmg by yy. Damage of each third XX increased by YY.
 
             return res;
         }

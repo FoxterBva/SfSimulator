@@ -21,7 +21,7 @@ namespace SkfrgSimCommon.Model.Abilities.Paladin
         {
             base.OnCast(context);
 
-            context.ApplyBuff(new PaladinHolyGround());
+            context.ApplyBuff(new PaladinHolyGround(), this.Parameters.Name);
         }
     }
 }
