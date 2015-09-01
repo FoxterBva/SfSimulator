@@ -17,24 +17,24 @@ namespace SkfrgSimCommon.Model.Abilities.Archer
             {
                 Name = AbilityNames.Archer.FireArrow,
 				CoolDown = 0,
-				DmgCoeff = 4.8,
-				DmgDelay = 500,
+				DmgCoeff = 4.05,
+				DmgDelay = 100,
 				ImpulseDmgCoeff = 0,
 				IsUseImpulse = false,
 				ResourceCost = 100,
 				TickDelay = 500,
 				Ticks = 24,
-				TotalCastTime = 1000
+				TotalCastTime = 500
             };
 
 			rnd = new Random((int)DateTime.UtcNow.Ticks);
 		}
 
-		public override void OnCast(EnvironmentContext context)
+		public override void OnCastStart(EnvironmentContext context)
 		{
-			base.OnCast(context);
+			base.OnCastStart(context);
 
-			context.ApplyBuff(new FireDot(), this.Parameters.Name);
+			context.ApplyBuff(new BurningDot(), this.Parameters.Name);
 
 			if (rnd.NextDouble() <= 0.2)
 			{

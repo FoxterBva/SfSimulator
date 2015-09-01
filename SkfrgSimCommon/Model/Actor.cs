@@ -12,15 +12,13 @@ namespace SkfrgSimCommon.Model
 	{
 		EnvironmentContext eContext;
 		public ActorStats pStats;
-		Calculator calc;
 
 		public double TotalDamage { get; set; }
 
-		public Actor(EnvironmentContext context, ActorStats stats, Calculator clc)
+		public Actor(EnvironmentContext context, ActorStats stats)
 		{
 			eContext = context;
 			pStats = stats;
-			calc = clc;
 			Abilities = new Dictionary<string, Ability>();
 			Buffs = new List<ActorBuff>();
             Reset();
@@ -31,20 +29,9 @@ namespace SkfrgSimCommon.Model
 			IsImpulseAvailable = true;
 			CurrentResource = MaxResource;
 			previousUsedAbility = null;
-			LastImpulseUsedAt = 0;
-			LastAbilityUsedAt = 0;
-			LastAbilityUsedCd = 0;
-			LastResourceRechargeAt = 0;
             CurrentHp = MaxHp;
 			CombatlogHistory = new List<LogEvent>();
 		}
-
-		string FormatTime(double time)
-		{
-			return String.Format("[{0:000.00}]", (double)time / 1000);
-		}
-
-		protected Ability previousUsedAbility = null;
 
 		/// <summary>
 		/// Override this method to set specific rotation
@@ -59,7 +46,7 @@ namespace SkfrgSimCommon.Model
 
         protected Ability UseAbility(Ability ability, int time)
         {
-            ability.OnCast(eContext);
+            ability.OnCastStart(eContext);
             previousUsedAbility = ability;
 
             var currentParams = GetAbilityParams(ability.Parameters.Name);
@@ -93,24 +80,29 @@ namespace SkfrgSimCommon.Model
 			AddHistoryEvent(new LogEvent(time, LogEventType.ResourceTick, "", null));
         }
 
+		protected Ability previousUsedAbility = null;
+
 		public bool IsImpulseAvailable { get; set; }
 		public double MaxResource { get; set; }
 		public double CurrentResource { get; set; }
 		public int ResourceRechargeRate { get; set; }
 		public double ResourceRechargeValue { get; set; }
-		public int LastResourceRechargeAt { get; set; }
 
         public double MaxHp { get; set; }
         public double CurrentHp { get; set; }
 
-		public int LastImpulseUsedAt { get; set; }
-		public int LastAbilityUsedAt { get; set; }
-		public int LastAbilityUsedCd { get; set; }
-
+		/// <summary>
+		/// Actor's ability and it's state
+		/// </summary>
 		public Dictionary<string, Ability> Abilities { get; set; }
 
+		/// <summary>
+		/// Actor's buff and its state
+		/// </summary>
+		public List<ActorBuff> Buffs { get; set; }
+
         /// <summary>
-        /// Gets ability params affected by buffs
+        /// Gets ability params affected by actor's buffs
         /// </summary>
         public ExtendedAbilityParams GetAbilityParams(string abilityName)
         {
@@ -150,7 +142,6 @@ namespace SkfrgSimCommon.Model
 			CombatlogHistory.Add(evt);
 		}
 
-        public List<ActorBuff> Buffs { get; set; }
 		public List<LogEvent> CombatlogHistory { get; set; }
 	}
 

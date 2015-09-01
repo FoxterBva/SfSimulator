@@ -27,9 +27,9 @@ namespace SkfrgSimCommon.Model.Abilities.GuardianOfLight
             rnd = new Random((int)DateTime.UtcNow.Ticks);
         }
 
-        public override void OnCast(EnvironmentContext context)
+        public override void OnCastStart(EnvironmentContext context)
         {
-            base.OnCast(context);
+            base.OnCastStart(context);
         }
     }
 }

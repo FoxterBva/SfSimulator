@@ -25,7 +25,7 @@ namespace SkfrgSimCommon.Model
         {
             var evt2 = obj as SimEvent;
             if (this.Time == evt2.Time)
-                return this.Priority.CompareTo(evt2.Priority);
+                return this.Priority.CompareTo(evt2.Priority) * (-1);
             else
                 return this.Time.CompareTo(evt2.Time);
         }

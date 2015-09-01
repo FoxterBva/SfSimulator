@@ -9,8 +9,8 @@ namespace SkfrgSimCommon.Classes
 {
 	public class Paladin : Actor
 	{
-		public Paladin(EnvironmentContext context, ActorStats stats, Calculator clc)
-			: base(context, stats, clc)
+		public Paladin(EnvironmentContext context, ActorStats stats)
+			: base(context, stats)
 		{
 			Abilities = new Dictionary<string, Ability>() { 
 				{ AbilityNames.Paladin.LKM, new RighteousBlow() },

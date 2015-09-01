@@ -14,6 +14,13 @@ namespace SkfrgSimCommon
 		public static double CritCoeff = (double)2/3;
 	}
 
+	public class ClassNames
+	{
+		public static readonly string Archer = "Archer";
+		public static readonly string Paladin = "Paladin";
+		public static readonly string Priest = "Priest";
+	}
+
     public enum EventType
     {
         ResourceGain,
@@ -59,7 +66,7 @@ namespace SkfrgSimCommon
 		{
 			public static readonly string AimedShot = "Прицельный выстрел";
 			public static readonly string LongAimedShot = "Прицельный выстрел(макс)";
-			public static readonly string StandardShot = "Обычный выстрел";
+			public static readonly string StandardShot = "Одиночный выстрел";
 			public static readonly string FireArrow = "Горящая стрела";
 			public static readonly string PiercingShot = "Пронзающий выстрел";
 			public static readonly string FireShelling = "Огненный обстрел";
@@ -78,8 +85,9 @@ namespace SkfrgSimCommon
         public static class Archer
         {
             public static readonly string Pristrel = "Пристрел";
-            public static readonly string FireDot = "Огнедот";
+			public static readonly string BurningDot = "Горение";
 			public static readonly string FireShellingBuff = "Прок обстрела";
+			public static readonly string ArcherSymbol = "Символ лучника";
         }
 
         public static class Paladin

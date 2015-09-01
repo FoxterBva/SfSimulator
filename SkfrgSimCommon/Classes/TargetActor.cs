@@ -8,7 +8,7 @@ namespace SkfrgSimCommon.Classes
 {
     public class TargetActor : Actor
     {
-        public TargetActor() : base(null, null, null)
+        public TargetActor() : base(null, null)
         {}
 
         protected override string SelectAbility(EnvironmentContext context)

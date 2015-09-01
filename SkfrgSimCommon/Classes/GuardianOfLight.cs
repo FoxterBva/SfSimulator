@@ -9,8 +9,8 @@ namespace SkfrgSimCommon.Classes
 {
     public class GuardianOfLight : Actor
     {
-        public GuardianOfLight(EnvironmentContext context, ActorStats stats, Calculator clc)
-            : base(context, stats, clc)
+        public GuardianOfLight(EnvironmentContext context, ActorStats stats)
+            : base(context, stats)
         {
             Abilities = new Dictionary<string, Ability>() { 
 				{ AbilityNames.GuardianOfLight.FlashingSpark, new FlashingSpark() },

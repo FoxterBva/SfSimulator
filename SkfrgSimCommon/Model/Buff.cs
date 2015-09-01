@@ -60,6 +60,9 @@ namespace SkfrgSimCommon.Model
         /// </summary>
         public int ResourceCost { get; set; }
 
+		/// <summary>
+		/// Checks if this buff effect affects specified ability
+		/// </summary>
         public virtual Func<string, bool> IsAppliedTo { get; set; }
 
         /// <summary>

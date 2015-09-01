@@ -5,6 +5,9 @@ using System.Text;
 
 namespace SkfrgSimCommon.Model.Buffs.Archer
 {
+	/// <summary>
+	/// Следующий огненный обсрел не имеет стоимости
+	/// </summary>
 	public class FireShellingBuff : Buff
 	{
 		public FireShellingBuff()
@@ -14,6 +17,14 @@ namespace SkfrgSimCommon.Model.Buffs.Archer
             this.Name = BuffNames.Archer.FireShellingBuff;
             this.MaxStack = 1;
 			this.IsDot = false;
+			this.Effects = new List<BuffEffect>()
+            {
+                new BuffEffect()
+                {
+                    ResourceCost = -1000,
+                    IsAppliedTo = (name) => name == AbilityNames.Archer.FireShelling
+                }
+            };
         }
 	}
 }

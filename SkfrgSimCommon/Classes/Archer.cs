@@ -9,8 +9,8 @@ namespace SkfrgSimCommon.Classes
 {
 	public class Archer : Actor
 	{
-		public Archer(EnvironmentContext context, ActorStats stats, Calculator clc)
-			: base(context, stats, clc)
+		public Archer(EnvironmentContext context, ActorStats stats)
+			: base(context, stats)
 		{
 			Abilities = new Dictionary<string, Ability>() { 
 				{ AbilityNames.Archer.AimedShot, new AimedShot() },
@@ -30,11 +30,12 @@ namespace SkfrgSimCommon.Classes
 
 		protected override string SelectAbility(EnvironmentContext context)
 		{
-			if (previousUsedAbility == null)
-				return AbilityNames.Archer.LongAimedShot;
+			// начинаем с прицельного
+			//if (previousUsedAbility == null)
+			//    return AbilityNames.Archer.LongAimedShot;
 
-			var fireDot = Buffs.FirstOrDefault(b => b.Buff.Name == BuffNames.Archer.FireDot);
-
+			// если не висит горение - вешаем огненную стрелу
+			var fireDot = context.Actor.Buffs.FirstOrDefault(b => b.Buff.Name == BuffNames.Archer.BurningDot);
 			if (fireDot == null)
 			{
 				var p = context.Actor.GetAbilityParams(AbilityNames.Archer.FireArrow);
@@ -43,18 +44,21 @@ namespace SkfrgSimCommon.Classes
 					return AbilityNames.Archer.FireArrow;
 			}
 
-			if (Buffs.FirstOrDefault(b => b.Buff.Name == BuffNames.Archer.FireShellingBuff) != null)
-			{ 
-				var shelling = context.Actor.GetAbilityParams(AbilityNames.Archer.FireShelling);
-				if (fireDot != null && fireDot.EndTime > context.CurrentTime + shelling.BaseParams.TotalCastTime)
-				{
-					return AbilityNames.Archer.FireShelling;
-				}
-			}
+			// если висит бафф бесплатного обстрела и горение будет висеть достаточно долго используем обстрел
+			//if (context.Actor.Buffs.FirstOrDefault(b => b.Buff.Name == BuffNames.Archer.FireShellingBuff) != null)
+			//{ 
+			//    var shelling = context.Actor.GetAbilityParams(AbilityNames.Archer.FireShelling);
+			//    if (fireDot != null && fireDot.EndTime > context.CurrentTime + shelling.BaseParams.TotalCastTime)
+			//    {
+			//        return AbilityNames.Archer.FireShelling;
+			//    }
+			//}
 
-			if (context.Actor.CurrentResource >= context.Actor.GetAbilityParams(AbilityNames.Archer.AimedShot).BaseParams.ResourceCost)
-                return AbilityNames.Archer.AimedShot;
+			//// если хватает ресурса - используем прицельный
+			//if (context.Actor.CurrentResource >= context.Actor.GetAbilityParams(AbilityNames.Archer.AimedShot).BaseParams.ResourceCost)
+			//    return AbilityNames.Archer.AimedShot;
 
+			//// используем обычный выстрел
 			return AbilityNames.Archer.StandardShot;
 		}
 	}

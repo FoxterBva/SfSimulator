@@ -23,9 +23,9 @@ namespace SkfrgSimCommon.Model.Abilities.GuardianOfLight
             };
         }
 
-        public override void OnCast(EnvironmentContext context)
+        public override void OnCastStart(EnvironmentContext context)
         {
-            base.OnCast(context);
+            base.OnCastStart(context);
         }
     }
 }

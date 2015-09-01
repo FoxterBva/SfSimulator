@@ -24,9 +24,9 @@ namespace SkfrgSimCommon.Model.Abilities.Archer
 			Parameters.TickDelay = 100;
 		}
 
-		public override void OnCast(EnvironmentContext context)
+		public override void OnCastStart(EnvironmentContext context)
 		{
-			base.OnCast(context);
+			base.OnCastStart(context);
 
 			// Снимаем бафф бесплатного обстрела после использования
 			var removeShellBuffEvent = context.Events.FirstOrDefault(e => e.Parameter == BuffNames.Archer.FireShellingBuff && e.Type == EventType.RemoveBuff);

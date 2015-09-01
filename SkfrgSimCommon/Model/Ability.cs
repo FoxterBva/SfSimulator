@@ -24,7 +24,7 @@ namespace SkfrgSimCommon.Model
 		/// Fired on ability cast
 		/// </summary>
 		/// <param name="context"></param>
-		public virtual void OnCast(EnvironmentContext context)
+		public virtual void OnCastStart(EnvironmentContext context)
 		{
             var currentParams = context.Actor.GetAbilityParams(this.Parameters.Name);
 
@@ -53,7 +53,7 @@ namespace SkfrgSimCommon.Model
 		}
 
 		/// <summary>
-		/// Fired on ability damage
+		/// Fired on ability damage (for cases when ability effects occurs on hit, not start casting)
 		/// </summary>
 		/// <param name="context"></param>
 		public virtual void OnDamage(EnvironmentContext context)

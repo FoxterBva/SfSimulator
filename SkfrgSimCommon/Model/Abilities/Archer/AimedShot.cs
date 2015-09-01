@@ -26,9 +26,9 @@ namespace SkfrgSimCommon.Model.Abilities.Archer
 			rnd = new Random((int)DateTime.UtcNow.Ticks);
 		}
 
-		public override void OnCast(EnvironmentContext context)
+		public override void OnCastStart(EnvironmentContext context)
 		{
-			base.OnCast(context);
+			base.OnCastStart(context);
 
 			if (rnd.NextDouble() <= 0.2)
 			{

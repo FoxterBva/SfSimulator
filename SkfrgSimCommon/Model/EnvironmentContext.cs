@@ -37,19 +37,6 @@ namespace SkfrgSimCommon.Model
 		public Actor Actor { get; set; }
 		public Actor Target { get; set; }
 
-		public void ApplyBuffToSource(object buff)
-		{
-			
-		}
-
-		public void ApplyBuffToTarget(object buff)
-		{
-
-		}
-
-		public void DamageTarget(Ability ability)
-		{ }
-
         public List<SimEvent> Events { get; set; }
 
         public SimEvent GetEvent()

@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbilityStatistic.cs" />
+    <Compile Include="ActorFactory.cs" />
     <Compile Include="Calculator.cs" />
     <Compile Include="Classes\Archer.cs" />
     <Compile Include="Classes\GuardianOfLight.cs" />
@@ -71,7 +72,8 @@
     <Compile Include="Model\ActorBuff.cs" />
     <Compile Include="Model\Buff.cs" />
     <Compile Include="Model\Buffs\ArcherPristrel.cs" />
-    <Compile Include="Model\Buffs\Archer\FireDot.cs" />
+    <Compile Include="Model\Buffs\Archer\ArcherSymbol.cs" />
+    <Compile Include="Model\Buffs\Archer\BurningDot.cs" />
     <Compile Include="Model\Buffs\Archer\FireShellingBuff.cs" />
     <Compile Include="Model\Buffs\DotBuff.cs" />
     <Compile Include="Model\Buffs\PaladinHolyGround.cs" />
